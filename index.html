@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day Quiz 💕</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #e74c3c;
+            margin-bottom: 30px;
+        }
+        
+        .question {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option-btn {
+            padding: 15px 25px;
+            font-size: 1rem;
+            border: 2px solid #ff6b6b;
+            background: white;
+            color: #ff6b6b;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: scale(1.02);
+        }
+        
+        .result {
+            display: none;
+            padding: 20px;
+        }
+        
+        .result h2 {
+            color: #e74c3c;
+        }
+        
+        .result p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .hearts {
+            font-size: 3rem;
+            margin: 20px 0;
+        }
+        
+        .restart-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .progress {
+            margin-bottom: 20px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>💕 Valentine's Day Quiz 💕</h1>
+        
+        <div id="quiz">
+            <div class="progress">Question <span id="current">1</span> of <span id="total">5</span></div>
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+        </div>
+        
+        <div class="result" id="result">
+            <div class="hearts">💖💖💖</div>
+            <h2 id="result-title"></h2>
+            <p id="result-text"></p>
+            <button class="restart-btn" onclick="restartQuiz()">Try Again 💕</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the most popular Valentine's Day gift?",
+                options: ["Chocolates", "Flowers", "Cards", "Jewelry"],
+                correct: 2
+            },
+            {
+                question: "Which Roman god is associated with Valentine's Day?",
+                options: ["Jupiter", "Mars", "Cupid", "Apollo"],
+                correct: 2
+            },
+            {
+                question: "What color rose symbolizes true love?",
+                options: ["White", "Pink", "Yellow", "Red"],
+                correct: 3
+            },
+            {
+                question: "In which century did Valentine's Day become associated with romantic love?",
+                options: ["12th Century", "14th Century", "16th Century", "18th Century"],
+                correct: 1
+            },
+            {
+                question: "Which country celebrates 'White Day' a month after Valentine's Day?",
+                options: ["France", "Brazil", "Japan", "Italy"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('question').textContent = q.question;
+            document.getElementById('current').textContent = currentQuestion + 1;
+            document.getElementById('total').textContent = questions.length;
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectAnswer(index);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(index) {
+            if (index === questions[currentQuestion].correct) {
+                score++;
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            
+            const percentage = (score / questions.length) * 100;
+            let title, text;
+            
+            if (percentage === 100) {
+                title = "Love Expert! 💘";
+                text = `Perfect score! You got all ${questions.length} questions right!`;
+            } else if (percentage >= 60) {
+                title = "Hopeless Romantic! 💕";
+                text = `Great job! You got ${score} out of ${questions.length} correct!`;
+            } else {
+                title = "Love is in the Air! 💗";
+                text = `You got ${score} out of ${questions.length}. Keep spreading the love!`;
+            }
+            
+            document.getElementById('result-title').textContent = title;
+            document.getElementById('result-text').textContent = text;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('quiz').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            loadQuestion();
+        }
+
+        // Start the quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
